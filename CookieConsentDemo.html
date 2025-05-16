@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cookie Consent Pop-up Demo</title>
+<style>
+  /* Overlay background */
+  #cookie-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  /* Pop-up container */
+  #cookie-popup {
+    background: white;
+    border-radius: 8px;
+    width: 360px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  #cookie-popup h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+  }
+
+  #cookie-popup p {
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  /* Buttons */
+  .btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin: 5px 5px 0 0;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-allow {
+    background-color: #1a73e8;
+    color: white;
+  }
+  .btn-allow:hover {
+    background-color: #155db8;
+  }
+
+  .btn-necessary {
+    background-color: #e8e8e8;
+    color: #333;
+  }
+  .btn-necessary:hover {
+    background-color: #cfcfcf;
+  }
+
+  .btn-toggle-list {
+    background: none;
+    border: none;
+    color: #1a73e8;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+
+  /* Cookie list styles */
+  #cookie-list {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #333;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    display: none;
+  }
+
+  #cookie-list ul {
+    padding-left: 20px;
+  }
+  
+  #cookie-list li {
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div id="cookie-popup-overlay">
+  <div id="cookie-popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <h2 id="popup-title">Cookie Settings</h2>
+    <p>We use cookies to enhance your browsing experience. Please select your cookie preferences.</p>
+    <p><strong>Note:</strong> <i>Selecting "Only Necessary Cookies" will limit our ability to save your preferred settings, or remember your choices.</i></p>    
+
+    <button class="btn btn-allow" id="allow-all-btn">Allow all cookies</button>
+    <button class="btn btn-necessary" id="necessary-btn">Only Necessary Cookies</button>
+    
+    <br />
+    <button class="btn-toggle-list" id="toggle-cookie-list-btn" aria-expanded="false" aria-controls="cookie-list">
+      Show cookie details ▼
+    </button>
+    
+    <div id="cookie-list" aria-hidden="true">
+      <ul>
+        <li><strong>Necessary Cookies:</strong> Essential for website functionality (e.g., session ID, security).</li>
+        <li><strong>Analytics Cookies:</strong> Collect anonymous data to improve site performance.</li>
+        <li><strong>Advertising Cookies:</strong> Track user behavior to show personalized ads. This data may be sold to third parties.</li>
+	<li><strong>Identifying Cookies:</strong> Access browser profile to obtain identifying information to personalize your experience.</li>
+        <li><strong>Preference Cookies:</strong> Remember user settings like language and layout.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle cookie list visibility
+  const toggleBtn = document.getElementById('toggle-cookie-list-btn');
+  const cookieList = document.getElementById('cookie-list');
+
+  toggleBtn.addEventListener('click', () => {
+    const isVisible = cookieList.style.display === 'block';
+    cookieList.style.display = isVisible ? 'none' : 'block';
+    toggleBtn.textContent = isVisible ? 'Show cookie details ▼' : 'Hide cookie details ▲';
+    toggleBtn.setAttribute('aria-expanded', !isVisible);
+    cookieList.setAttribute('aria-hidden', isVisible);
+  });
+
+  // Simulated data collection after consent
+  function collectUserData(allowAll) {
+    if (allowAll) {
+      
+      let browserData = {
+        browser: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        cookiesEnabled: navigator.cookieEnabled
+      };
+      
+      let userData = {
+        //name: name,
+       // age: age,
+        //gender: gender,
+        browserData: browserData
+      };
+      
+      console.log("User data collected:", userData);
+      alert("You allowed all cookies. User data is being collected. If you have concerns about how your data is being used call toll-free 1-800-555-3131. (Line available in English only.)");
+    } else {
+      alert("You allowed only necessary cookies. Limited data collected.");
+      console.log("You allowed only necessary cookies. No personal data will be collected.");
+    }
+    
+    // Close the pop-up
+    document.getElementById('cookie-popup-overlay').style.display = 'none';
+  }
+
+  // Button event listeners
+  document.getElementById('allow-all-btn').addEventListener('click', () => collectUserData(true));
+  document.getElementById('necessary-btn').addEventListener('click', () => collectUserData(false));
+</script>
+
+</body>
+</html>
